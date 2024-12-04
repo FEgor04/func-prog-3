@@ -1,0 +1,4 @@
+(executable
+ (public_name func_prog_3)
+ (name main)
+ (libraries func_prog_3))
