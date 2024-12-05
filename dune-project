@@ -5,7 +5,7 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github fegor04/func-prog-3))
 
 (authors "Egor Fedorov <fegor2004@gmail.com>")
 

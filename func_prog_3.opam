@@ -7,8 +7,8 @@ maintainer: ["Egor Fedorov <fegor2004@gmail.com>"]
 authors: ["Egor Fedorov <fegor2004@gmail.com>"]
 license: "MIT"
 tags: ["computational math" "interpolation"]
-homepage: "https://github.com/username/reponame"
-bug-reports: "https://github.com/username/reponame/issues"
+homepage: "https://github.com/fegor04/func-prog-3"
+bug-reports: "https://github.com/fegor04/func-prog-3/issues"
 depends: [
   "dune" {>= "3.17"}
   "ocaml"
@@ -28,4 +28,4 @@ build: [
     "@doc" {with-doc}
   ]
 ]
-dev-repo: "git+https://github.com/username/reponame.git"
+dev-repo: "git+https://github.com/fegor04/func-prog-3.git"
