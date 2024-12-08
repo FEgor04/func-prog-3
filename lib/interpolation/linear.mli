@@ -1,1 +1,1 @@
-val linear_interpolation : Common.interpolate
+module LinearMethod : Common.InterpolationMethod

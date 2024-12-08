@@ -1,1 +1,1 @@
-val lagrange_interpolation : Common.interpolate
+module LagrangeMethod : Common.InterpolationMethod

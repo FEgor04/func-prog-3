@@ -1,7 +1,12 @@
 type interpolationMethod = Linear | Lagrange
-type point = float * float
+type point = float * float [@@deriving show]
 type config = { dx : float }
 type interpolate = config -> point list -> point list
+
+module type InterpolationMethod = sig
+  val interpolate : interpolate
+  val window_size : int
+end
 
 (** Overwrite less operator to fix comparisons *)
 let ( <= ) a b = b -. a > 1e-9

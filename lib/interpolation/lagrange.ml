@@ -25,6 +25,11 @@ let lagrange_interpolation { dx } points =
   let ys = coverage_xs |> List.map interpolate in
   List.combine coverage_xs ys
 
+module LagrangeMethod : Common.InterpolationMethod = struct
+  let interpolate = lagrange_interpolation
+  let window_size = 4
+end
+
 let%expect_test "parabola y = x^2" =
   let dx = 1.0 in
   let xs = [ 0.0; 1.0; 2.0; 3.0; 4.0 ] in

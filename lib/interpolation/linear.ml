@@ -10,6 +10,11 @@ let linear_interpolation { dx } points =
   let answer_y = List.init n (fun i -> y1 +. (float_of_int i *. k *. dx)) in
   List.combine answer_x answer_y
 
+module LinearMethod : Common.InterpolationMethod = struct
+  let interpolate = linear_interpolation
+  let window_size = 2
+end
+
 let%expect_test "line x = y" =
   let dx = 0.5 in
   let xs = [ 0.0; 1.0 ] in
