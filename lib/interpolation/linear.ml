@@ -1,13 +1,30 @@
 open Common
 
 let linear_interpolation { dx } points =
-  let x1, y1 = List.hd points in
-  let x2, y2 = List.nth points 1 in
-  let k = (y2 -. y1) /. (x2 -. x1) in
   let xs = points |> List.map (fun (x, _) -> x) in
+  let n = List.length xs in
+  let first_x, first_y = List.hd points in
+  let second_x, second_y = List.nth points 1 in
+  let pre_x, pre_y = List.nth points (n - 2) in
+  let last_x, last_y = points |> List.rev |> List.hd in
   let answer_x = get_x_coverage { dx } xs in
-  let n = List.length answer_x in
-  let answer_y = List.init n (fun i -> y1 +. (float_of_int i *. k *. dx)) in
+  let answer_y =
+    answer_x
+    |> List.map (fun target_x ->
+           match target_x with
+           | x when x <= second_x ->
+               let k = (second_y -. first_y) /. (second_x -. first_x) in
+               first_y +. ((x -. first_x) *. k)
+           | x when x >= pre_x ->
+               let k = (last_y -. pre_y) /. (last_x -. pre_x) in
+               last_y +. ((x -. last_x) *. k)
+           | x ->
+               let next_idx = xs |> List.find_index (( <= ) x) |> Option.get in
+               let previous_x, previous_y = List.nth points (next_idx - 1) in
+               let next_x, next_y = List.nth points next_idx in
+               let k = (next_y -. previous_y) /. (next_x -. previous_x) in
+               previous_y +. ((x -. previous_x) *. k))
+  in
   List.combine answer_x answer_y
 
 module LinearMethod : Common.InterpolationMethod = struct
@@ -84,4 +101,20 @@ let%expect_test "parabola y = x^2" =
     2.500000: 7.500000
     2.750000: 8.250000
     3.000000: 9.000000
+    |}]
+
+let%expect_test "spline with multiple points" =
+  let dx = 1.0 in
+  let xs = [ 0.0; 1.0; 2.0; 3.0; 4.0 ] in
+  let ys = [ 0.0; 1.0; 0.0; 1.0; 0.0 ] in
+  let input = List.combine xs ys in
+  let interpolated = linear_interpolation { dx } input in
+  interpolated |> List.iter (fun (x, y) -> Printf.printf " %f: %f \n" x y);
+  [%expect
+    {|
+    0.000000: 0.000000
+    1.000000: 1.000000
+    2.000000: 0.000000
+    3.000000: 1.000000
+    4.000000: 0.000000
     |}]
