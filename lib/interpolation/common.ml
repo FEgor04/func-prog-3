@@ -1,9 +1,10 @@
-type interpolationMethod = Linear | Lagrange
+type interpolationMethod = Linear | Lagrange [@@deriving show]
 type point = float * float [@@deriving show]
 type config = { dx : float }
 type interpolate = config -> point list -> point list
 
 module type InterpolationMethod = sig
+  val name : interpolationMethod
   val interpolate : interpolate
   val window_size : int
 end

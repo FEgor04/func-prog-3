@@ -13,6 +13,7 @@ let linear_interpolation { dx } points =
 module LinearMethod : Common.InterpolationMethod = struct
   let interpolate = linear_interpolation
   let window_size = 2
+  let name = Linear
 end
 
 let%expect_test "line x = y" =

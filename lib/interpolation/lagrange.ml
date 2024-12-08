@@ -28,6 +28,7 @@ let lagrange_interpolation { dx } points =
 module LagrangeMethod : Common.InterpolationMethod = struct
   let interpolate = lagrange_interpolation
   let window_size = 4
+  let name = Lagrange
 end
 
 let%expect_test "parabola y = x^2" =
