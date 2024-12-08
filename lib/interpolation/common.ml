@@ -6,9 +6,9 @@ type interpolate = config -> point list -> point list
 (** Overwrite less operator to fix comparisons *)
 let ( <= ) a b = b -. a > 1e-9
 
-let get_x_coverage { dx } points =
-  let first_x = List.hd points in
-  let last_x = points |> List.rev |> List.hd in
+let get_x_coverage { dx } xs =
+  let first_x = List.hd xs in
+  let last_x = xs |> List.rev |> List.hd in
   let xs_coverage =
     Seq.unfold
       (fun x -> if x <= last_x then Some (x, x +. dx) else None)
