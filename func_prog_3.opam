@@ -12,6 +12,9 @@ bug-reports: "https://github.com/fegor04/func-prog-3/issues"
 depends: [
   "dune" {>= "3.17"}
   "ocaml"
+  "ocamlformat"
+  "ppx_inline_test"
+  "ppx_expect"
   "odoc" {with-doc}
 ]
 build: [

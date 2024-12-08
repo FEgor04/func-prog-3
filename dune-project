@@ -17,7 +17,7 @@
  (name func_prog_3)
  (synopsis "Interpolation in OCaml")
  (description "A laboratory work for Functional Programming course in ITMO University")
- (depends ocaml)
+ (depends ocaml ocamlformat ppx_inline_test ppx_expect)
  (tags
   ("computational math" "interpolation")))
 
