@@ -1,1 +1,1 @@
-val linearInterpolation : Common.interpolate
+val linear_interpolation : Common.interpolate

@@ -16,32 +16,33 @@ let get_x_coverage { dx } points =
   in
   let coverage = List.of_seq xs_coverage in
   let last_coverage = coverage |> List.rev |> List.hd in
-  if last_coverage < last_x then coverage @ [last_coverage +. dx] else coverage
+  if last_coverage < last_x then coverage @ [ last_coverage +. dx ]
+  else coverage
 
 let%expect_test "even" =
   let dx = 0.5 in
-  let lst = [0.0; 1.0] in
-  let xs = get_x_coverage {dx} lst in
+  let lst = [ 0.0; 1.0 ] in
+  let xs = get_x_coverage { dx } lst in
   xs |> List.iter (Printf.printf " %f ");
   [%expect {| 0.000000  0.500000  1.000000 |}]
 
 let%expect_test "not even" =
   let dx = 0.3 in
-  let lst = [0.0; 0.3; 0.6] in
-  let xs = get_x_coverage {dx} lst in
+  let lst = [ 0.0; 0.3; 0.6 ] in
+  let xs = get_x_coverage { dx } lst in
   xs |> List.iter (Printf.printf " %f ");
   [%expect {| 0.000000  0.300000  0.600000  |}]
 
 let%expect_test "not even" =
   let dx = 0.3 in
-  let lst = [0.0; 0.3; 0.6; 0.9] in
-  let xs = get_x_coverage {dx} lst in
+  let lst = [ 0.0; 0.3; 0.6; 0.9 ] in
+  let xs = get_x_coverage { dx } lst in
   xs |> List.iter (Printf.printf " %f ");
   [%expect {| 0.000000  0.300000  0.600000  0.900000 |}]
 
 let%expect_test "not even" =
   let dx = 0.3 in
-  let lst = [0.0; 0.3; 0.6; 0.9; 1.0] in
-  let xs = get_x_coverage {dx} lst in
+  let lst = [ 0.0; 0.3; 0.6; 0.9; 1.0 ] in
+  let xs = get_x_coverage { dx } lst in
   xs |> List.iter (Printf.printf " %f ");
   [%expect {| 0.000000  0.300000  0.600000  0.900000  1.200000 |}]
