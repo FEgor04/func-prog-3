@@ -17,7 +17,7 @@
  (name func_prog_3)
  (synopsis "Interpolation in OCaml")
  (description "A laboratory work for Functional Programming course in ITMO University")
- (depends ocaml ocamlformat ppx_inline_test ppx_expect ppx_deriving)
+ (depends ocaml ocamlformat ppx_inline_test ppx_expect ppx_deriving alcotest qcheck qcheck-alcotest)
  (tags
   ("computational math" "interpolation")))
 
