@@ -1,0 +1,34 @@
+name: Build, test, lint
+
+on:
+  - push
+  - pull_request
+
+permissions: read-all
+
+jobs:
+  lab2:
+    strategy:
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tree
+        uses: actions/checkout@v4
+
+      - name: Set-up OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: 5.2
+          dune-cache: true
+
+      - run: opam install . --deps-only --with-test
+
+      - run: opam exec -- dune build @fmt
+      - run: opam exec -- dune test
+
+      - name: Run step-by-step
+        run: echo -e "0,0\n1,1\n2,0\n3,1\n4,0\n5,1" | opam exec -- dune exec bin/main.exe -- -dx 1.0
+      - name: Run in full mode
+        run: echo -e "0,0\n1,1\n2,0\n3,1\n4,0\n5,1" | opam exec -- dune exec bin/main.exe -- -dx 0.5 -full
