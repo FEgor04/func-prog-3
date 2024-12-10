@@ -1,6 +1,6 @@
-# Functional Programming Lab 2
+# Functional Programming Lab 3
 
-[![Build, test, lint](https://github.com/FEgor04/func-prog-2/actions/workflows/flow.yaml/badge.svg)](https://github.com/FEgor04/func-prog-2/actions/workflows/flow.yaml)
+[![Build, test, lint](https://github.com/FEgor04/func-prog-3/actions/workflows/flow.yaml/badge.svg)](https://github.com/FEgor04/func-prog-3/actions/workflows/flow.yaml)
 
 - Федоров Егор, P3315
 - Линейная интерполяция и интерполяция Лагранжа
