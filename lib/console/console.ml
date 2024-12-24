@@ -16,6 +16,7 @@ let%test _ = get_window 3 [ 1; 2; 3 ] = [ 1; 2; 3 ]
 
 let interpolate_and_print_method { dx } points (interpolate, window_size, name)
     =
+  let points = get_window window_size points in
   let n = List.length points in
   if n < window_size then ()
   else
