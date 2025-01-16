@@ -1,3 +1,12 @@
 (test
  (name test_property)
- (libraries qcheck qcheck-alcotest alcotest interpolation))
+ (libraries qcheck qcheck-alcotest alcotest interpolation)
+ (modules test_property))
+
+(library
+ (name test_interpolation)
+ (libraries qcheck qcheck-alcotest alcotest interpolation console)
+ (inline_tests)
+ (preprocess
+  (pps ppx_expect))
+ (modules test_interpolation))

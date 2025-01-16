@@ -25,9 +25,15 @@ let anon_fun _f = ()
 
 let () =
   Arg.parse speclist anon_fun usage_msg;
-  let config =
-    Console.{ dx = !dx; is_full = !full; max_window_size = !max_window_size }
+  let initial_state =
+    Console.
+      {
+        dx = !dx;
+        is_full = !full;
+        max_window_size = !max_window_size;
+        points = [];
+      }
   in
-  let final_state = Console.infinite_loop config [] in
+  let final_state = Console.infinite_loop initial_state in
   if !full then print_endline "Computing interpolation on all points";
-  Console.interpolate_and_print { dx = config.dx } final_state
+  Console.interpolate_and_print { dx = initial_state.dx } final_state false

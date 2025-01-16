@@ -1,5 +1,8 @@
 type interpolationMethod = Linear | Lagrange [@@deriving show]
 type point = float * float [@@deriving show]
+
+let print_point point = print_endline @@ show_point @@ point
+
 type config = { dx : float }
 type interpolate = config -> point list -> point list
 
