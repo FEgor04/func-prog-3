@@ -35,5 +35,5 @@ let () =
       }
   in
   let final_state = Console.infinite_loop initial_state in
-  if !full then print_endline "Computing interpolation on all points";
+  print_endline "Computing interpolation on all points";
   Console.interpolate_and_print { dx = initial_state.dx } final_state false

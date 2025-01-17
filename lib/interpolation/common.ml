@@ -1,6 +1,7 @@
 type interpolationMethod = Linear | Lagrange [@@deriving show]
-type point = float * float [@@deriving show]
+type point = float * float
 
+let show_point (x, y) = Format.sprintf "(%.4f, %.4f)" x y
 let print_point point = print_endline @@ show_point @@ point
 
 type config = { dx : float }
@@ -40,7 +41,7 @@ let%expect_test "not even" =
   let lst = [ 0.0; 0.3; 0.6 ] in
   let xs = get_x_coverage { dx } lst in
   xs |> List.iter (Printf.printf " %f ");
-  [%expect {| 0.000000  0.300000  0.600000  |}]
+  [%expect {| 0.000000  0.300000  0.600000 |}]
 
 let%expect_test "not even" =
   let dx = 0.3 in
