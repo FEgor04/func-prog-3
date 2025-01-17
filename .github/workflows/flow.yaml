@@ -29,6 +29,8 @@ jobs:
       - run: opam exec -- dune test
 
       - name: Run step-by-step
-        run: echo -e "0,0\n1,1\n2,0\n3,1\n4,0\n5,1" | opam exec -- dune exec bin/main.exe -- -dx 1.0
-      - name: Run in full mode
-        run: echo -e "0,0\n1.571,1\n3.142,0\n4.172,-1\n12.568,0" | opam exec -- dune exec bin/main.exe -- -dx 0.5 -full
+        run: echo -e "0,0\n1,1\n2,0\n3,1\n4,0\n5,1" | opam exec -- dune exec bin/main.exe -- -dx 0.5
+      - name: Lab example
+        run: echo -e "0,0\n1.571,1\n3.142,0\n4.172,-1\n12.568,0" | opam exec -- dune exec bin/main.exe -- -dx 1.0
+      - name: Lab example, full mode
+        run: echo -e "0,0\n1.571,1\n3.142,0\n4.172,-1\n12.568,0" | opam exec -- dune exec bin/main.exe -- -dx 1.0 -full
