@@ -28,7 +28,7 @@ let interpolate_and_print_method { dx } points is_full
   if n < window_size then ()
   else
     let greater_than_option (x, _) =
-      match x_geq with None -> true | Some (x_geq, _) -> x >= x_geq
+      match x_geq with None -> true | Some (x_geq, _) -> x > x_geq
     in
     let result = interpolate { dx } points in
     print_endline (show_interpolationMethod name);

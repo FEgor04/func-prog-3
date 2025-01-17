@@ -31,6 +31,38 @@ let test ?(dx = 1.0) points =
   print_windows windows;
   print_interpolation_result dx windows
 
+let%expect_test "dx is greater than points" =
+  let points = [ (1.0, 1.0); (2.0, 2.0); (4.0, 4.0); (5.0, 2.0) ] in
+  test ~dx:3.0 points;
+  [%expect
+    {|
+     === WINDOWS ===
+    (1.0000, 1.0000)
+    (2.0000, 2.0000)
+
+    (1.0000, 1.0000)
+    (2.0000, 2.0000)
+    (4.0000, 4.0000)
+
+    (1.0000, 1.0000)
+    (2.0000, 2.0000)
+    (4.0000, 4.0000)
+    (5.0000, 2.0000)
+
+     === INTERPOLATION ===
+    Common.Linear
+    (1.0000, 1.0000)
+    (4.0000, 4.0000)
+    Common.Linear
+    (5.0000, 5.0000)
+    Common.Linear
+    (7.0000, -2.0000)
+    Common.Lagrange
+    (1.0000, 1.0000)
+    (4.0000, 4.0000)
+    (7.0000, -15.5000)
+    |}]
+
 let%expect_test "linear only" =
   let points = [ (1.0, 1.0); (2.0, 2.0) ] in
   test ~dx:0.5 points;
@@ -71,11 +103,9 @@ let%expect_test "linear & lagrange" =
     (1.5000, 1.5000)
     (2.0000, 2.0000)
     Common.Linear
-    (2.0000, 2.0000)
     (2.5000, 2.5000)
     (3.0000, 3.0000)
     Common.Linear
-    (3.0000, 3.0000)
     (3.5000, 3.5000)
     (4.0000, 4.0000)
     Common.Lagrange
@@ -120,11 +150,9 @@ let%expect_test "sin(x) test from lab" =
     (1.0000, 0.6365)
     (2.0000, 1.2731)
     Common.Linear
-    (1.5710, 1.0000)
     (2.5710, 0.3635)
     (3.5710, -0.2731)
     Common.Linear
-    (3.1420, 0.0000)
     (4.1420, -0.6369)
     (5.1420, -1.2739)
     Common.Lagrange
@@ -135,7 +163,6 @@ let%expect_test "sin(x) test from lab" =
     (4.0000, -0.6740)
     (5.0000, -1.0258)
     Common.Linear
-    (4.7120, -1.0000)
     (5.7120, -0.8727)
     (6.7120, -0.7454)
     (7.7120, -0.6181)
