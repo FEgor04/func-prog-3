@@ -17,7 +17,7 @@ let interplation_equals_in_points (interpolate, min_length) =
       QCheck.assume (n >= min_length);
       let xs = List.init n (fun i -> x_start +. (float_of_int i *. dx)) in
       let points = List.combine xs ys in
-      let interpolation = interpolate { dx } points in
+      let interpolation = interpolate ?start_x:None { dx } points in
       let interpolation_xs, _interpolation_ys = List.split interpolation in
       List.equal float_equals interpolation_xs xs)
 

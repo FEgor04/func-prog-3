@@ -14,44 +14,57 @@ let%test _ = get_window 1 [ 1; 2; 3 ] = [ 3 ]
 let%test _ = get_window 2 [ 1; 2; 3 ] = [ 2; 3 ]
 let%test _ = get_window 3 [ 1; 2; 3 ] = [ 1; 2; 3 ]
 
-let interpolate_and_print_method { dx } points is_full
-    (interpolate, window_size, name) =
-  let is_first =
-    List.length points < window_size || List.length points = window_size
-  in
-  let x_geq =
-    if (not is_first) && not is_full then List.nth_opt (List.rev points) 1
-    else None
-  in
-  let points = if not is_full then get_window window_size points else points in
-  let n = List.length points in
-  if n < window_size then ()
-  else
-    let greater_than_option (x, _) =
-      match x_geq with None -> true | Some (x_geq, _) -> x > x_geq
-    in
-    let result = interpolate { dx } points in
-    print_endline (show_interpolationMethod name);
-    result |> List.filter greater_than_option |> List.iter print_point
+module InterpolationMethodCompare = struct
+  type t = interpolationMethod
 
-let interpolate_and_print Interpolation.Common.{ dx } points is_full =
-  methods |> List.iter (interpolate_and_print_method { dx } points is_full)
+  let compare a b = compare_interpolationMethod a b
+end
+
+module InterpolationMethodMap = Map.Make (InterpolationMethodCompare)
 
 type state = {
   dx : float;
   is_full : bool;
   max_window_size : int;
   points : point list;
+  methods_starts : float InterpolationMethodMap.t;
 }
 
-let rec infinite_loop { dx; is_full; max_window_size; points } =
-  if not is_full then (
-    interpolate_and_print { dx } points false;
-    print_newline ());
-  let points = get_window max_window_size points in
+let interpolate_and_print_method { dx; points; methods_starts; _ }
+    (interpolate, window_size, name) =
+  let n = List.length points in
+  if n < window_size then None
+  else
+    let start_x = InterpolationMethodMap.find_opt name methods_starts in
+    let result = interpolate ?start_x { dx } points in
+    print_endline (show_interpolationMethod name);
+    let last_x, _ = List.hd @@ List.rev result in
+    result |> List.iter print_point;
+    Some last_x
+
+let interpolate_and_print state =
+  let starts = methods |> List.map (interpolate_and_print_method state) in
+  let method_names = List.map (fun (_, _, name) -> name) methods in
+  let starts_with_methods = List.combine starts method_names in
+  let updated_map =
+    starts_with_methods
+    |> List.fold_left
+         (fun map (start, method_name) ->
+           match start with
+           | None -> map
+           | Some x -> InterpolationMethodMap.add method_name (x +. state.dx) map)
+         state.methods_starts
+  in
+  { state with methods_starts = updated_map }
+
+let get_start_x dx = function Some last_x -> Some (last_x +. dx) | _ -> None
+
+let rec infinite_loop state =
+  let state =
+    if not state.is_full then interpolate_and_print state else state
+  in
+  let points = get_window state.max_window_size state.points in
   let res = Reader.read_point () in
   match res with
-  | Some (x, y) ->
-      infinite_loop
-        { dx; is_full; max_window_size; points = points @ [ (x, y) ] }
+  | Some (x, y) -> infinite_loop { state with points = points @ [ (x, y) ] }
   | None -> points

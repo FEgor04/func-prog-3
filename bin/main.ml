@@ -32,8 +32,18 @@ let () =
         is_full = !full;
         max_window_size = !max_window_size;
         points = [];
+        methods_starts = InterpolationMethodMap.empty;
       }
   in
-  let final_state = Console.infinite_loop initial_state in
+  let points = Console.infinite_loop initial_state in
   print_endline "Computing interpolation on all points";
-  Console.interpolate_and_print { dx = initial_state.dx } final_state false
+  ignore
+  @@ Console.interpolate_and_print
+       Console.
+         {
+           dx = initial_state.dx;
+           points;
+           is_full = true;
+           max_window_size = !max_window_size;
+           methods_starts = InterpolationMethodMap.empty;
+         }

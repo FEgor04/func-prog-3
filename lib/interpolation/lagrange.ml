@@ -18,9 +18,9 @@ let lagrange_interpolation_compute points x =
   |> List.mapi (fun i polynom -> polynom *. List.nth ys i)
   |> List.fold_left ( +. ) 0.0
 
-let lagrange_interpolation { dx } points =
+let lagrange_interpolation ?start_x { dx } points =
   let xs = points |> List.map (fun (x, _) -> x) in
-  let coverage_xs = get_x_coverage { dx } xs in
+  let coverage_xs = get_x_coverage ?start_x { dx } xs in
   let interpolate = lagrange_interpolation_compute points in
   let ys = coverage_xs |> List.map interpolate in
   List.combine coverage_xs ys

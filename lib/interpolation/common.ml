@@ -1,11 +1,11 @@
-type interpolationMethod = Linear | Lagrange [@@deriving show]
+type interpolationMethod = Linear | Lagrange [@@deriving show, ord]
 type point = float * float
 
 let show_point (x, y) = Format.sprintf "(%.4f, %.4f)" x y
 let print_point point = print_endline @@ show_point @@ point
 
 type config = { dx : float }
-type interpolate = config -> point list -> point list
+type interpolate = ?start_x:float -> config -> point list -> point list
 
 module type InterpolationMethod = sig
   val name : interpolationMethod
@@ -15,16 +15,14 @@ end
 
 let ( >. ) x y = x -. y > 1e-9
 
-let get_x_coverage { dx } lst =
+let get_x_coverage ?start_x { dx } lst =
   let rec generate acc current last =
     if current >. last then List.rev acc
     else generate (current :: acc) (current +. dx) last
   in
-  match lst with
-  | [] -> []
-  | hd :: _ ->
-      let last = List.fold_left max hd lst in
-      generate [] hd last
+  let first = match start_x with None -> lst |> List.hd | Some x -> x in
+  let last = List.fold_left max Float.neg_infinity lst in
+  generate [] first last
 
 type floats = float list [@@deriving show]
 

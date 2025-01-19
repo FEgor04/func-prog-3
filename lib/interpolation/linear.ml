@@ -1,13 +1,13 @@
 open Common
 
-let linear_interpolation { dx } points =
+let linear_interpolation ?start_x { dx } points =
   let xs = points |> List.map (fun (x, _) -> x) in
   let n = List.length xs in
   let first_x, first_y = List.hd points in
   let second_x, second_y = List.nth points 1 in
   let pre_x, pre_y = List.nth points (n - 2) in
   let last_x, last_y = points |> List.rev |> List.hd in
-  let answer_x = get_x_coverage { dx } xs in
+  let answer_x = get_x_coverage ?start_x { dx } xs in
   let answer_y =
     answer_x
     |> List.map (fun target_x ->
