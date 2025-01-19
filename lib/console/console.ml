@@ -52,7 +52,8 @@ let interpolate_and_print state =
          (fun map (start, method_name) ->
            match start with
            | None -> map
-           | Some x -> InterpolationMethodMap.add method_name (x +. state.dx) map)
+           | Some x ->
+               InterpolationMethodMap.add method_name (x +. state.dx) map)
          state.methods_starts
   in
   { state with methods_starts = updated_map }
