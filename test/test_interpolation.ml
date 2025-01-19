@@ -52,15 +52,11 @@ let%expect_test "dx is greater than points" =
      === INTERPOLATION ===
     Common.Linear
     (1.0000, 1.0000)
-    (4.0000, 4.0000)
     Common.Linear
-    (5.0000, 5.0000)
     Common.Linear
-    (7.0000, -2.0000)
     Common.Lagrange
     (1.0000, 1.0000)
     (4.0000, 4.0000)
-    (7.0000, -15.5000)
     |}]
 
 let%expect_test "linear only" =
@@ -148,20 +144,16 @@ let%expect_test "sin(x) test from lab" =
     Common.Linear
     (0.0000, 0.0000)
     (1.0000, 0.6365)
-    (2.0000, 1.2731)
     Common.Linear
     (2.5710, 0.3635)
-    (3.5710, -0.2731)
     Common.Linear
     (4.1420, -0.6369)
-    (5.1420, -1.2739)
     Common.Lagrange
     (0.0000, 0.0000)
     (1.0000, 0.9730)
     (2.0000, 0.8412)
     (3.0000, 0.1203)
     (4.0000, -0.6740)
-    (5.0000, -1.0258)
     Common.Linear
     (5.7120, -0.8727)
     (6.7120, -0.7454)
@@ -170,7 +162,6 @@ let%expect_test "sin(x) test from lab" =
     (9.7120, -0.3635)
     (10.7120, -0.2363)
     (11.7120, -0.1090)
-    (12.7120, 0.0183)
     Common.Lagrange
     (5.5710, -1.4858)
     (6.5710, -1.9495)
@@ -179,5 +170,4 @@ let%expect_test "sin(x) test from lab" =
     (9.5710, -2.2535)
     (10.5710, -1.8447)
     (11.5710, -1.1070)
-    (12.5710, 0.0039)
     |}]

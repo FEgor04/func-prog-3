@@ -13,46 +13,61 @@ module type InterpolationMethod = sig
   val window_size : int
 end
 
-(** Overwrite less operator to fix comparisons *)
-let ( <= ) a b = b -. a > 1e-9
+let ( >. ) x y = x -. y > 1e-9
 
-let get_x_coverage { dx } xs =
-  let first_x = List.hd xs in
-  let last_x = xs |> List.rev |> List.hd in
-  let xs_coverage =
-    Seq.unfold
-      (fun x -> if x <= last_x then Some (x, x +. dx) else None)
-      first_x
+let get_x_coverage { dx } lst =
+  let rec generate acc current last =
+    if current >. last then List.rev acc
+    else generate (current :: acc) (current +. dx) last
   in
-  let coverage = List.of_seq xs_coverage in
-  let last_coverage = coverage |> List.rev |> List.hd in
-  if last_coverage < last_x then coverage @ [ last_coverage +. dx ]
-  else coverage
+  match lst with
+  | [] -> []
+  | hd :: _ ->
+      let last = List.fold_left max hd lst in
+      generate [] hd last
+
+type floats = float list [@@deriving show]
+
+let print_floats floats = print_endline @@ show_floats floats
 
 let%expect_test "even" =
   let dx = 0.5 in
   let lst = [ 0.0; 1.0 ] in
   let xs = get_x_coverage { dx } lst in
-  xs |> List.iter (Printf.printf " %f ");
-  [%expect {| 0.000000  0.500000  1.000000 |}]
+  print_floats xs;
+  [%expect {| [0.; 0.5; 1.] |}]
 
 let%expect_test "not even" =
   let dx = 0.3 in
   let lst = [ 0.0; 0.3; 0.6 ] in
   let xs = get_x_coverage { dx } lst in
-  xs |> List.iter (Printf.printf " %f ");
-  [%expect {| 0.000000  0.300000  0.600000 |}]
+  print_floats xs;
+  [%expect {| [0.; 0.3; 0.6] |}]
 
 let%expect_test "not even" =
   let dx = 0.3 in
   let lst = [ 0.0; 0.3; 0.6; 0.9 ] in
   let xs = get_x_coverage { dx } lst in
-  xs |> List.iter (Printf.printf " %f ");
-  [%expect {| 0.000000  0.300000  0.600000  0.900000 |}]
+  print_floats xs;
+  [%expect {| [0.; 0.3; 0.6; 0.9] |}]
 
 let%expect_test "not even" =
   let dx = 0.3 in
   let lst = [ 0.0; 0.3; 0.6; 0.9; 1.0 ] in
   let xs = get_x_coverage { dx } lst in
-  xs |> List.iter (Printf.printf " %f ");
-  [%expect {| 0.000000  0.300000  0.600000  0.900000  1.200000 |}]
+  print_floats xs;
+  [%expect {| [0.; 0.3; 0.6; 0.9] |}]
+
+let%expect_test "not" =
+  let dx = 0.4 in
+  let lst = [ 0.0; 0.3; 0.6; 0.9; 1.0 ] in
+  let xs = get_x_coverage { dx } lst in
+  print_floats xs;
+  [%expect {| [0.; 0.4; 0.8] |}]
+
+let%expect_test "big dx" =
+  let dx = 5.46 in
+  let lst = [ -0.64; 4.82; 10.28; 15.74; 21.2 ] in
+  let xs = get_x_coverage { dx } lst in
+  print_floats xs;
+  [%expect {| [-0.64; 4.82; 10.28; 15.74; 21.2] |}]
