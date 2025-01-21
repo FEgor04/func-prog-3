@@ -38,9 +38,11 @@ let interpolate_and_print_method { dx; points; methods_starts; _ }
     let start_x = InterpolationMethodMap.find_opt name methods_starts in
     let result = interpolate ?start_x { dx } points in
     print_endline (show_interpolationMethod name);
-    let last_x, _ = List.hd @@ List.rev result in
-    result |> List.iter print_point;
-    Some last_x
+    if List.is_empty result then None
+    else
+      let last_x, _ = List.hd @@ List.rev result in
+      result |> List.iter print_point;
+      Some last_x
 
 let interpolate_and_print state =
   let starts = methods |> List.map (interpolate_and_print_method state) in
